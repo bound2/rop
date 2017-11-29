@@ -67,7 +67,15 @@ public final class Rop {
             Matcher firstMatcher = ARRAY_ELEMENT_PATTERN.matcher(firstToken);
             Map<String, Object> element;
             if (firstMatcher.find()) {
-                element = arrayValues.get(getArrayElement(firstMatcher));
+                String arrayPosition = firstMatcher.group();
+                if (firstToken.startsWith(arrayPosition)) {
+                    element = arrayValues.get(getArrayElement(arrayPosition));
+                } else {
+                    // token must end with array position if it wasn't present at start
+                    String tokenWithoutArrayPosition = firstToken.substring(0, firstToken.length() - arrayPosition.length());
+                    List<Map<String, Object>> array = (List<Map<String, Object>>) values.get(tokenWithoutArrayPosition);
+                    element = array.get(getArrayElement(arrayPosition));
+                }
             } else {
                 element = (Map<String, Object>) values.get(firstToken);
             }
@@ -77,18 +85,19 @@ public final class Rop {
                 Matcher matcher = ARRAY_ELEMENT_PATTERN.matcher(token);
                 if (matcher.find()) {
                     List<Map<String, Object>> array = (List<Map<String, Object>>) element.get(token);
-                    element = array.get(getArrayElement(matcher));
+                    element = array.get(getArrayElement(matcher.group()));
                 } else {
                     element = (Map<String, Object>) element.get(token);
                 }
             }
+            // Final value should come from the last token
             value = element.get(lastToken).toString();
         }
         return value;
     }
 
-    private Integer getArrayElement(Matcher matcher) {
-        return Integer.valueOf(matcher.group()
+    private Integer getArrayElement(String arrayPosition) {
+        return Integer.valueOf(arrayPosition
                 .replace("[", "")
                 .replace("]", ""));
     }

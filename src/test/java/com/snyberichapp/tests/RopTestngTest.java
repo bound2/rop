@@ -2,6 +2,7 @@ package com.snyberichapp.tests;
 
 import com.snyberichapp.common.Rop;
 import com.snyberichapp.common.TestngConfiguration;
+import com.snyberichapp.tests.pojo.NestedTestObject;
 import com.snyberichapp.tests.pojo.RegularTestObject;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -74,7 +75,42 @@ public class RopTestngTest {
 
     @Test
     public void nestedObjectTest() throws Exception {
+        Instant instant = Instant.now();
 
+        NestedTestObject nestedTestObject = new NestedTestObject();
+        nestedTestObject.setFirstName("Johan");
+        nestedTestObject.setLastName("Blem");
+
+        NestedTestObject.License license = new NestedTestObject.License();
+        license.setCategory("A");
+        license.setExpires(instant);
+        nestedTestObject.setLicense(license);
+
+        List<NestedTestObject.Car> cars = new ArrayList<>();
+        {
+            NestedTestObject.Car car = new NestedTestObject.Car();
+            car.setMake("AUDI");
+            car.setModel("A6");
+            cars.add(car);
+        }
+        {
+            NestedTestObject.Car car = new NestedTestObject.Car();
+            car.setMake("BMW");
+            car.setModel("535i");
+            cars.add(car);
+        }
+        nestedTestObject.setCars(cars);
+
+        Rop.of(nestedTestObject)
+                .assertEquals("firstName", "Johan")
+                .assertEquals("lastName", "Blem")
+                .assertEquals("license.category", "A")
+                .assertEquals("license.expires", DateTimeFormatter.ISO_INSTANT.format(instant))
+                .assertEquals("cars[0].make", "AUDI")
+                .assertEquals("cars[0].model", "A6")
+                .assertEquals("cars[1].make", "BMW")
+                .assertEquals("cars[1].model", "535i")
+        ;
     }
 
     @Test
