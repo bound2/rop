@@ -90,6 +90,7 @@ public final class Rop {
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     private String findValue(String key) {
         LinkedList<String> tokens = new LinkedList<>(Arrays.asList(key.split("\\.")));
         final Object value;
