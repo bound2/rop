@@ -115,7 +115,74 @@ public class RopTestngTest {
 
     @Test
     public void nestedArrayObjectTest() throws Exception {
+        Instant instant = Instant.now();
 
+        List<NestedTestObject> objects = new ArrayList<>();
+        {
+            NestedTestObject nestedTestObject = new NestedTestObject();
+            nestedTestObject.setFirstName("Johannes");
+            nestedTestObject.setLastName("Strauss");
+
+            NestedTestObject.License license = new NestedTestObject.License();
+            license.setCategory("B");
+            license.setExpires(instant);
+            nestedTestObject.setLicense(license);
+
+            List<NestedTestObject.Car> cars = new ArrayList<>();
+            {
+                NestedTestObject.Car car = new NestedTestObject.Car();
+                car.setMake("TOYOTA");
+                car.setModel("PRIUS");
+                cars.add(car);
+            }
+            {
+                NestedTestObject.Car car = new NestedTestObject.Car();
+                car.setMake("SUBARU");
+                car.setModel("BRZ");
+                cars.add(car);
+            }
+            nestedTestObject.setCars(cars);
+            objects.add(nestedTestObject);
+        }
+
+        {
+            NestedTestObject nestedTestObject = new NestedTestObject();
+            nestedTestObject.setFirstName("Young");
+            nestedTestObject.setLastName("Boi");
+
+            NestedTestObject.License license = new NestedTestObject.License();
+            license.setCategory("C");
+            license.setExpires(instant);
+            nestedTestObject.setLicense(license);
+
+            List<NestedTestObject.Car> cars = new ArrayList<>();
+            {
+                NestedTestObject.Car car = new NestedTestObject.Car();
+                car.setMake("MITSUBISHI");
+                car.setModel("LANCER");
+                cars.add(car);
+            }
+            nestedTestObject.setCars(cars);
+            objects.add(nestedTestObject);
+        }
+
+        Rop.of(objects)
+                .assertEquals("[0].firstName", "Johannes")
+                .assertEquals("[0].lastName", "Strauss")
+                .assertEquals("[0].license.category", "B")
+                .assertEquals("[0].license.expires", DateTimeFormatter.ISO_INSTANT.format(instant))
+                .assertEquals("[0].cars[0].make", "TOYOTA")
+                .assertEquals("[0].cars[0].model", "PRIUS")
+                .assertEquals("[0].cars[1].make", "SUBARU")
+                .assertEquals("[0].cars[1].model", "BRZ")
+                .newLine()
+                .assertEquals("[1].firstName", "Young")
+                .assertEquals("[1].lastName", "Boi")
+                .assertEquals("[1].license.category", "C")
+                .assertEquals("[1].license.expires", DateTimeFormatter.ISO_INSTANT.format(instant))
+                .assertEquals("[1].cars[0].make", "MITSUBISHI")
+                .assertEquals("[1].cars[0].model", "LANCER")
+        ;
     }
 
 }

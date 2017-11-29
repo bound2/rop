@@ -84,8 +84,10 @@ public final class Rop {
             for (String token : tokens) {
                 Matcher matcher = ARRAY_ELEMENT_PATTERN.matcher(token);
                 if (matcher.find()) {
-                    List<Map<String, Object>> array = (List<Map<String, Object>>) element.get(token);
-                    element = array.get(getArrayElement(matcher.group()));
+                    String arrayPosition = matcher.group();
+                    String tokenWithoutArrayPosition = token.substring(0, token.length() - arrayPosition.length());
+                    List<Map<String, Object>> array = (List<Map<String, Object>>) element.get(tokenWithoutArrayPosition);
+                    element = array.get(getArrayElement(arrayPosition));
                 } else {
                     element = (Map<String, Object>) element.get(token);
                 }
