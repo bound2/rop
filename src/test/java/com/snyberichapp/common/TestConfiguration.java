@@ -10,6 +10,10 @@ public interface TestConfiguration {
 
     Consumer<ResultComparison> containsConsumer();
 
+    Consumer<Object> nullConsumer();
+
     Consumer<Object> notNullConsumer();
+
+    Consumer<String> emptyConsumer();
 
 }

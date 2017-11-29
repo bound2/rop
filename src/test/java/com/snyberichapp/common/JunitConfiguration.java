@@ -28,8 +28,18 @@ public class JunitConfiguration implements TestConfiguration {
     }
 
     @Override
+    public Consumer<Object> nullConsumer() {
+        return Assert::assertNull;
+    }
+
+    @Override
     public Consumer<Object> notNullConsumer() {
         return Assert::assertNotNull;
+    }
+
+    @Override
+    public Consumer<String> emptyConsumer() {
+        return item -> Assert.assertEquals("", item, "Expected element to be empty, but was: " + item);
     }
 
 }

@@ -55,6 +55,38 @@ public final class Rop {
         return this;
     }
 
+    public Rop assertStartsWith(String key, String startsWith) {
+        String actualValue = findValue(key);
+        ResultComparison resultComparison = new ResultComparison(actualValue, startsWith);
+        testConfiguration.startsWithConsumer().accept(resultComparison);
+        return this;
+    }
+
+    public Rop assertContains(String key, String content) {
+        String actualValue = findValue(key);
+        ResultComparison resultComparison = new ResultComparison(actualValue, content);
+        testConfiguration.containsConsumer().accept(resultComparison);
+        return this;
+    }
+
+    public Rop assertEmpty(String key) {
+        String actualValue = findValue(key);
+        testConfiguration.emptyConsumer().accept(actualValue);
+        return this;
+    }
+
+    public Rop assertNull(String key) {
+        String actualValue = findValue(key);
+        testConfiguration.nullConsumer().accept(actualValue);
+        return this;
+    }
+
+    public Rop assertNotNull(String key) {
+        String actualValue = findValue(key);
+        testConfiguration.notNullConsumer().accept(actualValue);
+        return this;
+    }
+
     private String findValue(String key) {
         LinkedList<String> tokens = new LinkedList<>(Arrays.asList(key.split("\\.")));
         final String value;
