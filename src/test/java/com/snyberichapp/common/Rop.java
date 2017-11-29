@@ -30,6 +30,9 @@ public final class Rop {
     private List<Map<String, Object>> arrayValues;
 
     private Rop(Object object) throws IOException {
+        if (testConfiguration == null) {
+            throw new IllegalStateException("Test configuration is not set!");
+        }
         String json = OM.writeValueAsString(object);
         try {
             this.values = OM.readValue(json, TYPE_REFERENCE);
