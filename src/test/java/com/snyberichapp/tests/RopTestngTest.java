@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class RopTestngTest {
+public class RopTestngTest extends RopTest {
 
     @BeforeClass
     public void beforeClass() {
@@ -21,6 +21,7 @@ public class RopTestngTest {
     }
 
     @Test
+    @Override
     public void regularObjectTest() throws Exception {
         Calendar calendar = Calendar.getInstance();
         Instant instant = Instant.now();
@@ -34,6 +35,7 @@ public class RopTestngTest {
     }
 
     @Test
+    @Override
     public void arrayObjectTest() throws Exception {
         Calendar calendar = Calendar.getInstance();
         Instant instant = Instant.now();
@@ -74,6 +76,7 @@ public class RopTestngTest {
     }
 
     @Test
+    @Override
     public void nestedObjectTest() throws Exception {
         Instant instant = Instant.now();
 
@@ -114,6 +117,7 @@ public class RopTestngTest {
     }
 
     @Test
+    @Override
     public void nestedArrayObjectTest() throws Exception {
         Instant instant = Instant.now();
 
@@ -183,6 +187,36 @@ public class RopTestngTest {
                 .assertEquals("[1].cars[0].make", "MITSUBISHI")
                 .assertEquals("[1].cars[0].model", "LANCER")
         ;
+    }
+
+    @Test
+    @Override
+    public void startsWithTest() {
+
+    }
+
+    @Test
+    @Override
+    public void containsTest() {
+
+    }
+
+    @Test
+    @Override
+    public void emptyTest() {
+
+    }
+
+    @Test
+    @Override
+    public void nullTest() {
+
+    }
+
+    @Test
+    @Override
+    public void notNullTest() {
+
     }
 
 }
