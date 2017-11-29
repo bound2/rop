@@ -48,7 +48,7 @@ public class RopTestngTest {
             objects.add(testObject);
         }
         {
-            RegularTestObject testObject = new RegularTestObject("jansen_array", 8, null, calendar, instant);
+            RegularTestObject testObject = new RegularTestObject("jansen_array", 8, Boolean.FALSE, calendar, instant);
             objects.add(testObject);
         }
 
@@ -67,7 +67,7 @@ public class RopTestngTest {
                 .newLine()
                 .assertEquals("[2].name", "jansen_array")
                 .assertEquals("[2].kidCount", "8")
-                .assertEquals("[2].married", "null") // TODO assertEmpty, assertNotExist
+                .assertEquals("[2].married", "false")
                 .assertEquals("[2].born", DateTimeFormatter.ISO_INSTANT.format(instant))
                 .assertEquals("[2].died", DateTimeFormatter.ISO_INSTANT.format(instant))
         ;
