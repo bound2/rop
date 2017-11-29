@@ -11,6 +11,7 @@ import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 public class RopTestngTest extends RopTest {
@@ -71,8 +72,7 @@ public class RopTestngTest extends RopTest {
                 .assertEquals("[2].kidCount", "8")
                 .assertEquals("[2].married", "false")
                 .assertEquals("[2].born", DateTimeFormatter.ISO_INSTANT.format(instant))
-                .assertEquals("[2].died", DateTimeFormatter.ISO_INSTANT.format(instant))
-        ;
+                .assertEquals("[2].died", DateTimeFormatter.ISO_INSTANT.format(instant));
     }
 
     @Test
@@ -112,8 +112,7 @@ public class RopTestngTest extends RopTest {
                 .assertEquals("cars[0].make", "AUDI")
                 .assertEquals("cars[0].model", "A6")
                 .assertEquals("cars[1].make", "BMW")
-                .assertEquals("cars[1].model", "535i")
-        ;
+                .assertEquals("cars[1].model", "535i");
     }
 
     @Test
@@ -185,38 +184,72 @@ public class RopTestngTest extends RopTest {
                 .assertEquals("[1].license.category", "C")
                 .assertEquals("[1].license.expires", DateTimeFormatter.ISO_INSTANT.format(instant))
                 .assertEquals("[1].cars[0].make", "MITSUBISHI")
-                .assertEquals("[1].cars[0].model", "LANCER")
-        ;
+                .assertEquals("[1].cars[0].model", "LANCER");
     }
 
     @Test
     @Override
-    public void startsWithTest() {
+    public void startsWithTest() throws Exception {
+        RegularTestObject testObject = new RegularTestObject("Jim", 17, Boolean.TRUE, null, null);
 
+        Rop.of(testObject)
+                .assertStartsWith("name", "Ji")
+                .assertStartsWith("kidCount", "1")
+                .assertStartsWith("married", "tru");
     }
 
     @Test
     @Override
-    public void containsTest() {
+    public void containsTest() throws Exception  {
+        RegularTestObject testObject = new RegularTestObject("Alexander", 575, Boolean.FALSE, null, null);
 
+        Rop.of(testObject)
+                .assertContains("name", "xan")
+                .assertContains("kidCount", "7")
+                .assertContains("married", "ls");
     }
 
     @Test
     @Override
-    public void emptyTest() {
-
+    public void emptyTest() throws Exception  {
+        RegularTestObject testObject = new RegularTestObject("", null, null, null, null);
+        Rop.of(testObject)
+                .assertEmpty("name");
     }
 
     @Test
     @Override
-    public void nullTest() {
+    public void nullTest() throws Exception  {
+        RegularTestObject testObject = new RegularTestObject(null, null, null, null, null);
 
+        Rop.of(testObject)
+                .assertNull("name")
+                .assertNull("kidCount")
+                .assertNull("married")
+                .assertNull("born")
+                .assertNull("died");
+
+        NestedTestObject nestedTestObject = new NestedTestObject();
+
+        NestedTestObject.Car car = new NestedTestObject.Car();
+        nestedTestObject.setCars(Collections.singletonList(car));
+
+        Rop.of(nestedTestObject)
+                .assertNull("cars[0].make")
+                .assertNull("cars[0].model");
     }
 
     @Test
     @Override
-    public void notNullTest() {
+    public void notNullTest() throws Exception  {
+        RegularTestObject testObject = new RegularTestObject("Thor", 2, Boolean.FALSE, Calendar.getInstance(), Instant.now());
 
+        Rop.of(testObject)
+                .assertNotNull("name")
+                .assertNotNull("kidCount")
+                .assertNotNull("married")
+                .assertNotNull("born")
+                .assertNotNull("died");
     }
 
 }

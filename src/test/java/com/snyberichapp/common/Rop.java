@@ -89,9 +89,9 @@ public final class Rop {
 
     private String findValue(String key) {
         LinkedList<String> tokens = new LinkedList<>(Arrays.asList(key.split("\\.")));
-        final String value;
+        final Object value;
         if (tokens.size() <= 1) {
-            value = values.get(key).toString();
+            value = values.get(key);
         } else {
             // something.different.arrays[0].value
             // [0].something.different.arrays[0].value
@@ -125,9 +125,10 @@ public final class Rop {
                 }
             }
             // Final value should come from the last token
-            value = element.get(lastToken).toString();
+            value = element.get(lastToken);
         }
-        return value;
+
+        return value != null ? value.toString() : null;
     }
 
     private Integer getArrayElement(String arrayPosition) {
