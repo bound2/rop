@@ -3,7 +3,6 @@ package com.snyberichapp.tests;
 import com.snyberichapp.common.Rop;
 import com.snyberichapp.tests.pojo.NestedTestObject;
 import com.snyberichapp.tests.pojo.RegularTestObject;
-import org.testng.annotations.Test;
 
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
@@ -14,7 +13,6 @@ import java.util.List;
 
 public abstract class RopTest {
 
-    @Test
     public void regularObjectTest() throws Exception {
         Calendar calendar = Calendar.getInstance();
         Instant instant = Instant.now();
@@ -27,7 +25,6 @@ public abstract class RopTest {
                 .assertEquals("died", DateTimeFormatter.ISO_INSTANT.format(instant));
     }
 
-    @Test
     public void arrayObjectTest() throws Exception {
         Calendar calendar = Calendar.getInstance();
         Instant instant = Instant.now();
@@ -66,7 +63,6 @@ public abstract class RopTest {
                 .assertEquals("[2].died", DateTimeFormatter.ISO_INSTANT.format(instant));
     }
 
-    @Test
     public void nestedObjectTest() throws Exception {
         Instant instant = Instant.now();
 
@@ -105,7 +101,6 @@ public abstract class RopTest {
                 .assertEquals("cars[1].model", "535i");
     }
 
-    @Test
     public void nestedArrayObjectTest() throws Exception {
         Instant instant = Instant.now();
 
@@ -176,7 +171,6 @@ public abstract class RopTest {
                 .assertEquals("[1].cars[0].model", "LANCER");
     }
 
-    @Test
     public void startsWithTest() throws Exception {
         RegularTestObject testObject = new RegularTestObject("Jim", 17, Boolean.TRUE, null, null);
 
@@ -186,7 +180,6 @@ public abstract class RopTest {
                 .assertStartsWith("married", "tru");
     }
 
-    @Test
     public void containsTest() throws Exception {
         RegularTestObject testObject = new RegularTestObject("Alexander", 575, Boolean.FALSE, null, null);
 
@@ -196,14 +189,12 @@ public abstract class RopTest {
                 .assertContains("married", "ls");
     }
 
-    @Test
     public void emptyTest() throws Exception {
         RegularTestObject testObject = new RegularTestObject("", null, null, null, null);
         Rop.of(testObject)
                 .assertEmpty("name");
     }
 
-    @Test
     public void nullTest() throws Exception {
         RegularTestObject testObject = new RegularTestObject(null, null, null, null, null);
 
@@ -224,7 +215,6 @@ public abstract class RopTest {
                 .assertNull("cars[0].model");
     }
 
-    @Test
     public void notNullTest() throws Exception {
         RegularTestObject testObject = new RegularTestObject("Thor", 2, Boolean.FALSE, Calendar.getInstance(), Instant.now());
 
