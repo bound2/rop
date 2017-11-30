@@ -51,6 +51,10 @@ public final class Rop {
         return this;
     }
 
+    // TODO assert array size by name
+    // TODO printAssertions
+    // TODO assertAll
+
     public Rop assertEquals(String key, String expectedValue) {
         String actualValue = findValue(key);
         ResultComparison resultComparison = new ResultComparison(actualValue, expectedValue);
