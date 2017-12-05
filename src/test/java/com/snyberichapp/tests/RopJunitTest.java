@@ -38,6 +38,12 @@ public class RopJunitTest extends RopTest {
 
     @Test
     @Override
+    public void twoDimensionalArrayTest() throws Exception {
+        super.twoDimensionalArrayTest();
+    }
+
+    @Test
+    @Override
     public void startsWithTest() throws Exception {
         super.startsWithTest();
     }
