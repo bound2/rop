@@ -106,18 +106,22 @@ public final class Rop {
     @SuppressWarnings("unchecked")
     private Object findNextElement(Object element, String token) {
         Matcher matcher = ARRAY_ELEMENT_PATTERN.matcher(token);
-        if (matcher.find()) {
-            for (int i = 0; i <= matcher.groupCount(); i++) {
-                String arrayPosition = matcher.group(i);
-                if (token.startsWith(arrayPosition)) {
-                    element = ((List<Map<String, Object>>) element).get(getArrayElement(arrayPosition));
-                } else {
-                    String tokenWithoutArrayPosition = token.substring(0, token.length() - arrayPosition.length());
-                    List<Map<String, Object>> array = (List<Map<String, Object>>) ((Map<String, Object>) element).get(tokenWithoutArrayPosition);
-                    element = array.get(getArrayElement(arrayPosition));
-                }
+        StringBuilder sb = new StringBuilder();
+
+        while (matcher.find()) {
+            String arrayPosition = matcher.group();
+            sb.append(arrayPosition);
+
+            if (token.startsWith(sb.toString())) {
+                element = ((List<Map<String, Object>>) element).get(getArrayElement(arrayPosition));
+            } else {
+                String tokenWithoutArrayPosition = token.substring(0, token.length() - arrayPosition.length());
+                List<Map<String, Object>> array = (List<Map<String, Object>>) ((Map<String, Object>) element).get(tokenWithoutArrayPosition);
+                element = array.get(getArrayElement(arrayPosition));
             }
-        } else {
+        }
+
+        if (sb.length() == 0) {
             element = ((Map<String, Object>) element).get(token);
         }
 

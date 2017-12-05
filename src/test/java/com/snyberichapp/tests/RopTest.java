@@ -183,7 +183,7 @@ public abstract class RopTest {
                     .assertEquals("[0][2]", "Vici")
                     .newLine()
                     .assertEquals("[1][0]", "Trio")
-                    .assertEquals("[1][0]", "Leo")
+                    .assertEquals("[1][1]", "Leo")
                     .newLine()
                     .assertEquals("[2][0]", "Neo");
         }
