@@ -1,10 +1,8 @@
 package com.snyberichapp.common;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
@@ -19,26 +17,18 @@ public final class Rop {
 
     private static final DateFormat DF = initDateFormat();
     private static final ObjectMapper OM = initObjectMapper();
-    private static final TypeReference<Map<String, Object>> TYPE_REFERENCE = new TypeReference<Map<String, Object>>() {
-    };
-    private static final TypeReference<List<Map<String, Object>>> LIST_TYPE_REFERENCE = new TypeReference<List<Map<String, Object>>>() {
-    };
     private static final Pattern ARRAY_ELEMENT_PATTERN = Pattern.compile("\\[\\d+\\]");
+
     private static TestConfiguration testConfiguration;
 
-    private Map<String, Object> values;
-    private List<Map<String, Object>> arrayValues;
+    private Object values;
 
     private Rop(Object object) throws IOException {
         if (testConfiguration == null) {
             throw new IllegalStateException("Test configuration is not set!");
         }
         String json = OM.writeValueAsString(object);
-        try {
-            this.values = OM.readValue(json, TYPE_REFERENCE);
-        } catch (MismatchedInputException e) {
-            this.arrayValues = OM.readValue(json, LIST_TYPE_REFERENCE);
-        }
+        this.values = OM.readValue(json, Object.class);
     }
 
     public Rop newLine() {
@@ -46,9 +36,14 @@ public final class Rop {
     }
 
     public Rop assertArraySize(int expectedSize) {
-        ResultComparison resultComparison = new ResultComparison(String.valueOf(arrayValues.size()), String.valueOf(expectedSize));
-        testConfiguration.equalsConsumer().accept(resultComparison);
-        return this;
+        if (values instanceof Collection) {
+            String actualSize = String.valueOf(((Collection) values).size());
+            ResultComparison resultComparison = new ResultComparison(actualSize, String.valueOf(expectedSize));
+            testConfiguration.equalsConsumer().accept(resultComparison);
+            return this;
+        } else {
+            throw new IllegalStateException("Expected array comparison for dataset: " + values);
+        }
     }
 
     // TODO assert array size by name
@@ -97,46 +92,36 @@ public final class Rop {
     @SuppressWarnings("unchecked")
     private String findValue(String key) {
         LinkedList<String> tokens = new LinkedList<>(Arrays.asList(key.split("\\.")));
-        final Object value;
-        if (tokens.size() <= 1) {
-            value = values.get(key);
-        } else {
-            // something.different.arrays[0].value
-            // [0].something.different.arrays[0].value
-            String firstToken = tokens.removeFirst();
-            Matcher firstMatcher = ARRAY_ELEMENT_PATTERN.matcher(firstToken);
-            Map<String, Object> element;
-            if (firstMatcher.find()) {
-                String arrayPosition = firstMatcher.group();
-                if (firstToken.startsWith(arrayPosition)) {
-                    element = arrayValues.get(getArrayElement(arrayPosition));
-                } else {
-                    // token must end with array position if it wasn't present at start
-                    String tokenWithoutArrayPosition = firstToken.substring(0, firstToken.length() - arrayPosition.length());
-                    List<Map<String, Object>> array = (List<Map<String, Object>>) values.get(tokenWithoutArrayPosition);
-                    element = array.get(getArrayElement(arrayPosition));
-                }
-            } else {
-                element = (Map<String, Object>) values.get(firstToken);
-            }
 
-            String lastToken = tokens.removeLast();
-            for (String token : tokens) {
-                Matcher matcher = ARRAY_ELEMENT_PATTERN.matcher(token);
-                if (matcher.find()) {
-                    String arrayPosition = matcher.group();
-                    String tokenWithoutArrayPosition = token.substring(0, token.length() - arrayPosition.length());
-                    List<Map<String, Object>> array = (List<Map<String, Object>>) element.get(tokenWithoutArrayPosition);
-                    element = array.get(getArrayElement(arrayPosition));
-                } else {
-                    element = (Map<String, Object>) element.get(token);
-                }
-            }
-            // Final value should come from the last token
-            value = element.get(lastToken);
+        String firstToken = tokens.removeFirst();
+        Object element = findNextElement(values, firstToken);
+
+        for (String token : tokens) {
+            element = findNextElement(element, token);
         }
 
-        return value != null ? value.toString() : null;
+        return element != null ? element.toString() : null;
+    }
+
+    @SuppressWarnings("unchecked")
+    private Object findNextElement(Object element, String token) {
+        Matcher matcher = ARRAY_ELEMENT_PATTERN.matcher(token);
+        if (matcher.find()) {
+            for (int i = 0; i <= matcher.groupCount(); i++) {
+                String arrayPosition = matcher.group(i);
+                if (token.startsWith(arrayPosition)) {
+                    element = ((List<Map<String, Object>>) element).get(getArrayElement(arrayPosition));
+                } else {
+                    String tokenWithoutArrayPosition = token.substring(0, token.length() - arrayPosition.length());
+                    List<Map<String, Object>> array = (List<Map<String, Object>>) ((Map<String, Object>) element).get(tokenWithoutArrayPosition);
+                    element = array.get(getArrayElement(arrayPosition));
+                }
+            }
+        } else {
+            element = ((Map<String, Object>) element).get(token);
+        }
+
+        return element;
     }
 
     private Integer getArrayElement(String arrayPosition) {

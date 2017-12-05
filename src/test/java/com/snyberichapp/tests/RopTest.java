@@ -6,10 +6,9 @@ import com.snyberichapp.tests.pojo.RegularTestObject;
 
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+
+import static java.util.Collections.singletonMap;
 
 public abstract class RopTest {
 
@@ -169,6 +168,51 @@ public abstract class RopTest {
                 .assertEquals("[1].license.expires", DateTimeFormatter.ISO_INSTANT.format(instant))
                 .assertEquals("[1].cars[0].make", "MITSUBISHI")
                 .assertEquals("[1].cars[0].model", "LANCER");
+    }
+
+    public void twoDimensionalArrayTest() throws Exception {
+        {
+            List<String[]> items = new ArrayList<>();
+            items.add(new String[]{"Veni", "Vidi", "Vici"});
+            items.add(new String[]{"Trio", "Leo"});
+            items.add(new String[]{"Neo"});
+
+            Rop.of(items)
+                    .assertEquals("[0][0]", "Veni")
+                    .assertEquals("[0][1]", "Vidi")
+                    .assertEquals("[0][2]", "Vici")
+                    .newLine()
+                    .assertEquals("[1][0]", "Trio")
+                    .assertEquals("[1][0]", "Leo")
+                    .newLine()
+                    .assertEquals("[2][0]", "Neo");
+        }
+
+        {
+            List<Map[]> items = new ArrayList<>();
+            items.add(new Map[] {
+                    singletonMap("key", "Value"),
+                    singletonMap("hey", 1),
+                    singletonMap("tramp", Boolean.FALSE)
+            });
+            items.add(new Map[] {
+                    singletonMap("top", "Kek"),
+                    singletonMap("yolo", Boolean.TRUE)
+            });
+            items.add(new Map[] {
+                    singletonMap("something", "Bad")
+            });
+
+            Rop.of(items)
+                    .assertEquals("[0][0].key", "Value")
+                    .assertEquals("[0][1].hey", "1")
+                    .assertEquals("[0][2].tramp", "false")
+                    .newLine()
+                    .assertEquals("[1][0].top", "Kek")
+                    .assertEquals("[1][1].yolo", "true")
+                    .newLine()
+                    .assertEquals("[2][0].something", "Bad");
+        }
     }
 
     public void startsWithTest() throws Exception {
