@@ -46,51 +46,62 @@ public final class Rop {
         }
     }
 
-    // TODO assert array size by name
+    public Rop assertArraySize(String arrayKey, int expectedSize) {
+        Object result = findValue(arrayKey);
+        if (result instanceof Collection) {
+            String actualSize = String.valueOf(((Collection) result).size());
+            ResultComparison resultComparison = new ResultComparison(actualSize, String.valueOf(expectedSize));
+            testConfiguration.equalsConsumer().accept(resultComparison);
+        } else {
+            throw new IllegalStateException("Expected array comparison for dataset: " + result);
+        }
+        return this;
+    }
+
     // TODO printAssertions
     // TODO assertAll
 
     public Rop assertEquals(String key, String expectedValue) {
-        String actualValue = findValue(key);
+        String actualValue = findValueAsString(key);
         ResultComparison resultComparison = new ResultComparison(actualValue, expectedValue);
         testConfiguration.equalsConsumer().accept(resultComparison);
         return this;
     }
 
     public Rop assertStartsWith(String key, String startsWith) {
-        String actualValue = findValue(key);
+        String actualValue = findValueAsString(key);
         ResultComparison resultComparison = new ResultComparison(actualValue, startsWith);
         testConfiguration.startsWithConsumer().accept(resultComparison);
         return this;
     }
 
     public Rop assertContains(String key, String content) {
-        String actualValue = findValue(key);
+        String actualValue = findValueAsString(key);
         ResultComparison resultComparison = new ResultComparison(actualValue, content);
         testConfiguration.containsConsumer().accept(resultComparison);
         return this;
     }
 
     public Rop assertEmpty(String key) {
-        String actualValue = findValue(key);
+        String actualValue = findValueAsString(key);
         testConfiguration.emptyConsumer().accept(actualValue);
         return this;
     }
 
     public Rop assertNull(String key) {
-        String actualValue = findValue(key);
+        String actualValue = findValueAsString(key);
         testConfiguration.nullConsumer().accept(actualValue);
         return this;
     }
 
     public Rop assertNotNull(String key) {
-        String actualValue = findValue(key);
+        String actualValue = findValueAsString(key);
         testConfiguration.notNullConsumer().accept(actualValue);
         return this;
     }
 
     @SuppressWarnings("unchecked")
-    private String findValue(String key) {
+    private Object findValue(String key) {
         LinkedList<String> tokens = new LinkedList<>(Arrays.asList(key.split("\\.")));
 
         String firstToken = tokens.removeFirst();
@@ -100,6 +111,11 @@ public final class Rop {
             element = findNextElement(element, token);
         }
 
+        return element;
+    }
+
+    private String findValueAsString(String key) {
+        Object element = findValue(key);
         return element != null ? element.toString() : null;
     }
 

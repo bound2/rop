@@ -97,7 +97,8 @@ public abstract class RopTest {
                 .assertEquals("cars[0].make", "AUDI")
                 .assertEquals("cars[0].model", "A6")
                 .assertEquals("cars[1].make", "BMW")
-                .assertEquals("cars[1].model", "535i");
+                .assertEquals("cars[1].model", "535i")
+                .assertArraySize("cars", 2);
     }
 
     public void nestedArrayObjectTest() throws Exception {
@@ -161,13 +162,15 @@ public abstract class RopTest {
                 .assertEquals("[0].cars[0].model", "PRIUS")
                 .assertEquals("[0].cars[1].make", "SUBARU")
                 .assertEquals("[0].cars[1].model", "BRZ")
+                .assertArraySize("[0].cars", 2)
                 .newLine()
                 .assertEquals("[1].firstName", "Young")
                 .assertEquals("[1].lastName", "Boi")
                 .assertEquals("[1].license.category", "C")
                 .assertEquals("[1].license.expires", DateTimeFormatter.ISO_INSTANT.format(instant))
                 .assertEquals("[1].cars[0].make", "MITSUBISHI")
-                .assertEquals("[1].cars[0].model", "LANCER");
+                .assertEquals("[1].cars[0].model", "LANCER")
+                .assertArraySize("[1].cars", 1);
     }
 
     public void twoDimensionalArrayTest() throws Exception {
@@ -181,11 +184,14 @@ public abstract class RopTest {
                     .assertEquals("[0][0]", "Veni")
                     .assertEquals("[0][1]", "Vidi")
                     .assertEquals("[0][2]", "Vici")
+                    .assertArraySize("[0]", 3)
                     .newLine()
                     .assertEquals("[1][0]", "Trio")
                     .assertEquals("[1][1]", "Leo")
+                    .assertArraySize("[1]", 2)
                     .newLine()
-                    .assertEquals("[2][0]", "Neo");
+                    .assertEquals("[2][0]", "Neo")
+                    .assertArraySize("[2]", 1);
         }
 
         {
@@ -207,11 +213,14 @@ public abstract class RopTest {
                     .assertEquals("[0][0].key", "Value")
                     .assertEquals("[0][1].hey", "1")
                     .assertEquals("[0][2].tramp", "false")
+                    .assertArraySize("[0]", 3)
                     .newLine()
                     .assertEquals("[1][0].top", "Kek")
                     .assertEquals("[1][1].yolo", "true")
+                    .assertArraySize("[1]", 2)
                     .newLine()
-                    .assertEquals("[2][0].something", "Bad");
+                    .assertEquals("[2][0].something", "Bad")
+                    .assertArraySize("[2]", 1);
         }
     }
 
