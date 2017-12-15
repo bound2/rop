@@ -16,7 +16,7 @@ public abstract class RopTest {
         Calendar calendar = Calendar.getInstance();
         Instant instant = Instant.now();
         RegularTestObject testObject = new RegularTestObject("sven", 7, Boolean.TRUE, calendar, instant);
-        Rop.of(testObject)
+        Rop.of(testObject).printAssertions()
                 .assertEquals("name", "sven")
                 .assertEquals("kidCount", "7")
                 .assertEquals("married", "true")
@@ -42,7 +42,7 @@ public abstract class RopTest {
             objects.add(testObject);
         }
 
-        Rop.of(objects).assertArraySize(3)
+        Rop.of(objects).printAssertions().assertArraySize(3)
                 .assertEquals("[0].name", "sven_array")
                 .assertEquals("[0].kidCount", "14")
                 .assertEquals("[0].married", "true")
@@ -89,7 +89,7 @@ public abstract class RopTest {
         }
         nestedTestObject.setCars(cars);
 
-        Rop.of(nestedTestObject)
+        Rop.of(nestedTestObject).printAssertions()
                 .assertEquals("firstName", "Johan")
                 .assertEquals("lastName", "Blem")
                 .assertEquals("license.category", "A")
@@ -153,7 +153,7 @@ public abstract class RopTest {
             objects.add(nestedTestObject);
         }
 
-        Rop.of(objects)
+        Rop.of(objects).printAssertions()
                 .assertEquals("[0].firstName", "Johannes")
                 .assertEquals("[0].lastName", "Strauss")
                 .assertEquals("[0].license.category", "B")
@@ -180,7 +180,7 @@ public abstract class RopTest {
             items.add(new String[]{"Trio", "Leo"});
             items.add(new String[]{"Neo"});
 
-            Rop.of(items)
+            Rop.of(items).printAssertions()
                     .assertEquals("[0][0]", "Veni")
                     .assertEquals("[0][1]", "Vidi")
                     .assertEquals("[0][2]", "Vici")
@@ -209,7 +209,7 @@ public abstract class RopTest {
                     singletonMap("something", "Bad")
             });
 
-            Rop.of(items)
+            Rop.of(items).printAssertions()
                     .assertEquals("[0][0].key", "Value")
                     .assertEquals("[0][1].hey", "1")
                     .assertEquals("[0][2].tramp", "false")
@@ -227,7 +227,7 @@ public abstract class RopTest {
     public void startsWithTest() throws Exception {
         RegularTestObject testObject = new RegularTestObject("Jim", 17, Boolean.TRUE, null, null);
 
-        Rop.of(testObject)
+        Rop.of(testObject).printAssertions()
                 .assertStartsWith("name", "Ji")
                 .assertStartsWith("kidCount", "1")
                 .assertStartsWith("married", "tru");
@@ -236,7 +236,7 @@ public abstract class RopTest {
     public void containsTest() throws Exception {
         RegularTestObject testObject = new RegularTestObject("Alexander", 575, Boolean.FALSE, null, null);
 
-        Rop.of(testObject)
+        Rop.of(testObject).printAssertions()
                 .assertContains("name", "xan")
                 .assertContains("kidCount", "7")
                 .assertContains("married", "ls");
@@ -244,14 +244,14 @@ public abstract class RopTest {
 
     public void emptyTest() throws Exception {
         RegularTestObject testObject = new RegularTestObject("", null, null, null, null);
-        Rop.of(testObject)
+        Rop.of(testObject).printAssertions()
                 .assertEmpty("name");
     }
 
     public void nullTest() throws Exception {
         RegularTestObject testObject = new RegularTestObject(null, null, null, null, null);
 
-        Rop.of(testObject)
+        Rop.of(testObject).printAssertions()
                 .assertNull("name")
                 .assertNull("kidCount")
                 .assertNull("married")
@@ -263,7 +263,7 @@ public abstract class RopTest {
         NestedTestObject.Car car = new NestedTestObject.Car();
         nestedTestObject.setCars(Collections.singletonList(car));
 
-        Rop.of(nestedTestObject)
+        Rop.of(nestedTestObject).printAssertions()
                 .assertNull("cars[0].make")
                 .assertNull("cars[0].model");
     }
@@ -271,7 +271,7 @@ public abstract class RopTest {
     public void notNullTest() throws Exception {
         RegularTestObject testObject = new RegularTestObject("Thor", 2, Boolean.FALSE, Calendar.getInstance(), Instant.now());
 
-        Rop.of(testObject)
+        Rop.of(testObject).printAssertions()
                 .assertNotNull("name")
                 .assertNotNull("kidCount")
                 .assertNotNull("married")

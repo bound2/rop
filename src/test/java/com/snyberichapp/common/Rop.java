@@ -9,10 +9,17 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+// TODO assertAll
+// TODO add printAssertion config
 public final class Rop {
 
     private static final DateFormat DF = initDateFormat();
@@ -58,8 +65,60 @@ public final class Rop {
         return this;
     }
 
-    // TODO printAssertions
-    // TODO assertAll
+    public Rop printAssertions() {
+        StringBuilder sb = printAssertions(new StringBuilder(), new StringBuilder(), values);
+        System.out.println(sb);
+        return this;
+    }
+
+    private StringBuilder printAssertions(StringBuilder assertionBuilder, StringBuilder jsonKeyBuilder, Object element) {
+        if (element instanceof Map) {
+            //noinspection unchecked
+            ((Map) element).forEach((k, v) -> {
+                if (v instanceof Collection) {
+                    StringBuilder keyBuilderCopy = new StringBuilder(jsonKeyBuilder);
+                    if (keyBuilderCopy.length() > 0) {
+                        keyBuilderCopy.append(".");
+                    }
+                    keyBuilderCopy.append(k).append(".");
+                    assertionBuilder.append(printAssertions(new StringBuilder(), keyBuilderCopy, v));
+                }
+                if (v instanceof Map) {
+                    StringBuilder keyBuilderCopy = new StringBuilder(jsonKeyBuilder);
+                    assertionBuilder.append(printAssertions(new StringBuilder(), keyBuilderCopy, v));
+                } else {
+                    StringBuilder prefix = new StringBuilder(jsonKeyBuilder);
+                    final String key = prefix.length() == 0 ? k.toString() : prefix.append(".").append(k.toString()).toString();
+                    assertionBuilder.append(determineAssertion(key, v)).append(System.lineSeparator());
+                }
+            });
+        }
+        if (element instanceof Collection) {
+            int i = 0;
+            Collection elements = (Collection) element;
+            for (Object object : elements) {
+                StringBuilder arrayKeyBuilder = new StringBuilder(jsonKeyBuilder).append("[").append(i).append("]");
+                assertionBuilder.append(printAssertions(new StringBuilder(), arrayKeyBuilder, object));
+                i++;
+            }
+        }
+        return assertionBuilder;
+    }
+
+    private String determineAssertion(String key, Object value) {
+        if (value == null) {
+            return String.format(".assertNull(\"%s\")", key);
+        } else if (value instanceof Collection) {
+            Collection elements = (Collection) value;
+            return String.format(".assertArraySize(\"%s\", \"%s\")", key, elements.size());
+        } else {
+            if ("".equals(value.toString())) {
+                return String.format(".assertEmpty(\"%s\")", key);
+            } else {
+                return String.format(".assertEquals(\"%s\", \"%s\")", key, value);
+            }
+        }
+    }
 
     public Rop assertEquals(String key, String expectedValue) {
         String actualValue = findValueAsString(key);
