@@ -89,6 +89,10 @@ public final class Rop {
                 }
                 if (v instanceof Map) {
                     StringBuilder keyBuilderCopy = new StringBuilder(jsonKeyBuilder);
+                    if (keyBuilderCopy.length() > 0) {
+                        keyBuilderCopy.append(".");
+                    }
+                    keyBuilderCopy.append(k);
                     assertionBuilder.append(buildAssertions(new StringBuilder(), keyBuilderCopy, v));
                 } else {
                     StringBuilder prefix = new StringBuilder(jsonKeyBuilder);
