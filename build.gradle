@@ -19,10 +19,16 @@ dependencies {
     compile group: 'org.testng', name: 'testng', version: '6.13.1'
 }
 
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+    classifier "sources"
+}
+
 publishing {
     publications {
         maven(MavenPublication) {
             from components.java
+            artifact sourceJar
         }
     }
     repositories {
