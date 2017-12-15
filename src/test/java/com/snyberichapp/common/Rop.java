@@ -35,6 +35,9 @@ public final class Rop {
         if (testConfiguration == null) {
             throw new IllegalStateException("Test configuration is not set!");
         }
+        if (assertionPrinter == null) {
+            throw new IllegalStateException("Assertion printer is not set!");
+        }
         String json = OM.writeValueAsString(object);
         this.values = OM.readValue(json, Object.class);
     }
