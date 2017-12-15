@@ -13,6 +13,7 @@ public class NestedTestObject {
     public static class Car {
         private String make;
         private String model;
+        private List<String> notes;
 
         public String getMake() {
             return make;
@@ -28,6 +29,14 @@ public class NestedTestObject {
 
         public void setModel(String model) {
             this.model = model;
+        }
+
+        public List<String> getNotes() {
+            return notes;
+        }
+
+        public void setNotes(List<String> notes) {
+            this.notes = notes;
         }
     }
 

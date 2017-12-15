@@ -92,8 +92,7 @@ public final class Rop {
                     assertionBuilder.append(determineAssertion(key, v)).append(System.lineSeparator());
                 }
             });
-        }
-        if (element instanceof Collection) {
+        } else if (element instanceof Collection) {
             int i = 0;
             Collection elements = (Collection) element;
             for (Object object : elements) {
@@ -101,6 +100,9 @@ public final class Rop {
                 assertionBuilder.append(buildAssertions(new StringBuilder(), arrayKeyBuilder, object));
                 i++;
             }
+        } else {
+            String key = jsonKeyBuilder.toString();
+            assertionBuilder.append(determineAssertion(key, findValue(key))).append(System.lineSeparator());
         }
         return assertionBuilder;
     }

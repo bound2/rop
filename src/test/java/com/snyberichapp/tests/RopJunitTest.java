@@ -71,4 +71,10 @@ public class RopJunitTest extends RopTest {
     public void notNullTest() throws Exception {
         super.notNullTest();
     }
+
+    @Test
+    @Override
+    public void printAssertionsTest() throws Exception {
+        super.printAssertionsTest();
+    }
 }
