@@ -110,7 +110,7 @@ public final class Rop {
             return String.format(".assertNull(\"%s\")", key);
         } else if (value instanceof Collection) {
             Collection elements = (Collection) value;
-            return String.format(".assertArraySize(\"%s\", \"%s\")", key, elements.size());
+            return String.format(".assertArraySize(\"%s\", %s)", key, elements.size());
         } else {
             if ("".equals(value.toString())) {
                 return String.format(".assertEmpty(\"%s\")", key);
