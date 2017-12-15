@@ -70,12 +70,12 @@ public final class Rop {
     }
 
     public Rop printAssertions() {
-        StringBuilder sb = printAssertions(new StringBuilder(), new StringBuilder(), values);
+        StringBuilder sb = buildAssertions(new StringBuilder(), new StringBuilder(), values);
         assertionPrinter.accept(sb.toString());
         return this;
     }
 
-    private StringBuilder printAssertions(StringBuilder assertionBuilder, StringBuilder jsonKeyBuilder, Object element) {
+    private StringBuilder buildAssertions(StringBuilder assertionBuilder, StringBuilder jsonKeyBuilder, Object element) {
         if (element instanceof Map) {
             //noinspection unchecked
             ((Map) element).forEach((k, v) -> {
@@ -85,11 +85,11 @@ public final class Rop {
                         keyBuilderCopy.append(".");
                     }
                     keyBuilderCopy.append(k).append(".");
-                    assertionBuilder.append(printAssertions(new StringBuilder(), keyBuilderCopy, v));
+                    assertionBuilder.append(buildAssertions(new StringBuilder(), keyBuilderCopy, v));
                 }
                 if (v instanceof Map) {
                     StringBuilder keyBuilderCopy = new StringBuilder(jsonKeyBuilder);
-                    assertionBuilder.append(printAssertions(new StringBuilder(), keyBuilderCopy, v));
+                    assertionBuilder.append(buildAssertions(new StringBuilder(), keyBuilderCopy, v));
                 } else {
                     StringBuilder prefix = new StringBuilder(jsonKeyBuilder);
                     final String key = prefix.length() == 0 ? k.toString() : prefix.append(".").append(k.toString()).toString();
@@ -102,7 +102,7 @@ public final class Rop {
             Collection elements = (Collection) element;
             for (Object object : elements) {
                 StringBuilder arrayKeyBuilder = new StringBuilder(jsonKeyBuilder).append("[").append(i).append("]");
-                assertionBuilder.append(printAssertions(new StringBuilder(), arrayKeyBuilder, object));
+                assertionBuilder.append(buildAssertions(new StringBuilder(), arrayKeyBuilder, object));
                 i++;
             }
         }
