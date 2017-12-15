@@ -139,7 +139,11 @@ public final class Rop {
                 throw new IllegalStateException("Expected array comparison for dataset: " + arrayObject);
             }
         } catch (Throwable t) {
-            failedAssertions.add(t);
+            if (assertAll) {
+                failedAssertions.add(t);
+            } else {
+                throw t;
+            }
         }
         return this;
     }
