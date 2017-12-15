@@ -15,11 +15,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 // TODO assertAll
-// TODO add printAssertion config
 public final class Rop {
 
     private static final DateFormat DF = initDateFormat();
@@ -27,6 +27,7 @@ public final class Rop {
     private static final Pattern ARRAY_ELEMENT_PATTERN = Pattern.compile("\\[\\d+\\]");
 
     private static TestConfiguration testConfiguration;
+    private static Consumer<String> assertionPrinter;
 
     private Object values;
 
@@ -67,7 +68,7 @@ public final class Rop {
 
     public Rop printAssertions() {
         StringBuilder sb = printAssertions(new StringBuilder(), new StringBuilder(), values);
-        System.out.println(sb);
+        assertionPrinter.accept(sb.toString());
         return this;
     }
 
@@ -214,8 +215,9 @@ public final class Rop {
         return new Rop(object);
     }
 
-    public static void setConfiguration(TestConfiguration testConfiguration) {
+    public static void setConfiguration(TestConfiguration testConfiguration, Consumer<String> assertionPrinter) {
         Rop.testConfiguration = testConfiguration;
+        Rop.assertionPrinter = assertionPrinter;
     }
 
     private static ObjectMapper initObjectMapper() {

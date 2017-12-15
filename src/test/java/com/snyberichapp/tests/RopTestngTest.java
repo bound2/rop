@@ -9,7 +9,7 @@ public class RopTestngTest extends RopTest {
 
     @BeforeClass
     public void beforeClass() {
-        Rop.setConfiguration(new TestngConfiguration());
+        Rop.setConfiguration(new TestngConfiguration(), System.out::println);
     }
 
     @Test

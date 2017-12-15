@@ -9,7 +9,7 @@ public class RopJunitTest extends RopTest {
 
     @BeforeClass
     public static void beforeClass() {
-        Rop.setConfiguration(new JunitConfiguration());
+        Rop.setConfiguration(new JunitConfiguration(), System.out::println);
     }
 
     @Test
