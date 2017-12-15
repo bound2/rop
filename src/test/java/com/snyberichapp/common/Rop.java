@@ -19,7 +19,6 @@ import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-// TODO assertAll
 public final class Rop {
 
     private static final DateFormat DF = initDateFormat();
@@ -30,6 +29,8 @@ public final class Rop {
     private static Consumer<String> assertionPrinter;
 
     private Object values;
+    private boolean assertAll;
+    private List<Throwable> failedAssertions = new LinkedList<>();
 
     private Rop(Object object) throws IOException {
         if (testConfiguration == null) {
@@ -42,30 +43,21 @@ public final class Rop {
         this.values = OM.readValue(json, Object.class);
     }
 
-    public Rop newLine() {
+    public Rop enableAssertAll() {
+        this.assertAll = true;
         return this;
     }
 
-    public Rop assertArraySize(int expectedSize) {
-        if (values instanceof Collection) {
-            String actualSize = String.valueOf(((Collection) values).size());
-            ResultComparison resultComparison = new ResultComparison(actualSize, String.valueOf(expectedSize));
-            testConfiguration.equalsConsumer().accept(resultComparison);
-            return this;
-        } else {
-            throw new IllegalStateException("Expected array comparison for dataset: " + values);
+    public void assertAll() {
+        for (Throwable t : failedAssertions) {
+            t.printStackTrace();
+        }
+        if (failedAssertions.size() > 0) {
+            throw new RuntimeException("Assert all failed!");
         }
     }
 
-    public Rop assertArraySize(String arrayKey, int expectedSize) {
-        Object result = findValue(arrayKey);
-        if (result instanceof Collection) {
-            String actualSize = String.valueOf(((Collection) result).size());
-            ResultComparison resultComparison = new ResultComparison(actualSize, String.valueOf(expectedSize));
-            testConfiguration.equalsConsumer().accept(resultComparison);
-        } else {
-            throw new IllegalStateException("Expected array comparison for dataset: " + result);
-        }
+    public Rop newLine() {
         return this;
     }
 
@@ -128,42 +120,114 @@ public final class Rop {
         }
     }
 
+    public Rop assertArraySize(int expectedSize) {
+        return assertArraySize(values, expectedSize);
+    }
+
+    public Rop assertArraySize(String arrayKey, int expectedSize) {
+        Object arrayObject = findValue(arrayKey);
+        return assertArraySize(arrayObject, expectedSize);
+    }
+
+    private Rop assertArraySize(Object arrayObject, int expectedSize) {
+        try {
+            if (arrayObject instanceof Collection) {
+                String actualSize = String.valueOf(((Collection) arrayObject).size());
+                ResultComparison resultComparison = new ResultComparison(actualSize, String.valueOf(expectedSize));
+                testConfiguration.equalsConsumer().accept(resultComparison);
+            } else {
+                throw new IllegalStateException("Expected array comparison for dataset: " + arrayObject);
+            }
+        } catch (Throwable t) {
+            failedAssertions.add(t);
+        }
+        return this;
+    }
+
     public Rop assertEquals(String key, String expectedValue) {
-        String actualValue = findValueAsString(key);
-        ResultComparison resultComparison = new ResultComparison(actualValue, expectedValue);
-        testConfiguration.equalsConsumer().accept(resultComparison);
+        try {
+            String actualValue = findValueAsString(key);
+            ResultComparison resultComparison = new ResultComparison(actualValue, expectedValue);
+            testConfiguration.equalsConsumer().accept(resultComparison);
+        } catch (Throwable t) {
+            if (assertAll) {
+                failedAssertions.add(t);
+            } else {
+                throw t;
+            }
+        }
         return this;
     }
 
     public Rop assertStartsWith(String key, String startsWith) {
-        String actualValue = findValueAsString(key);
-        ResultComparison resultComparison = new ResultComparison(actualValue, startsWith);
-        testConfiguration.startsWithConsumer().accept(resultComparison);
+        try {
+            String actualValue = findValueAsString(key);
+            ResultComparison resultComparison = new ResultComparison(actualValue, startsWith);
+            testConfiguration.startsWithConsumer().accept(resultComparison);
+        } catch (Throwable t) {
+            if (assertAll) {
+                failedAssertions.add(t);
+            } else {
+                throw t;
+            }
+        }
         return this;
     }
 
     public Rop assertContains(String key, String content) {
-        String actualValue = findValueAsString(key);
-        ResultComparison resultComparison = new ResultComparison(actualValue, content);
-        testConfiguration.containsConsumer().accept(resultComparison);
+        try {
+            String actualValue = findValueAsString(key);
+            ResultComparison resultComparison = new ResultComparison(actualValue, content);
+            testConfiguration.containsConsumer().accept(resultComparison);
+        } catch (Throwable t) {
+            if (assertAll) {
+                failedAssertions.add(t);
+            } else {
+                throw t;
+            }
+        }
         return this;
     }
 
     public Rop assertEmpty(String key) {
-        String actualValue = findValueAsString(key);
-        testConfiguration.emptyConsumer().accept(actualValue);
+        try {
+            String actualValue = findValueAsString(key);
+            testConfiguration.emptyConsumer().accept(actualValue);
+        } catch (Throwable t) {
+            if (assertAll) {
+                failedAssertions.add(t);
+            } else {
+                throw t;
+            }
+        }
         return this;
     }
 
     public Rop assertNull(String key) {
-        String actualValue = findValueAsString(key);
-        testConfiguration.nullConsumer().accept(actualValue);
+        try {
+            String actualValue = findValueAsString(key);
+            testConfiguration.nullConsumer().accept(actualValue);
+        } catch (Throwable t) {
+            if (assertAll) {
+                failedAssertions.add(t);
+            } else {
+                throw t;
+            }
+        }
         return this;
     }
 
     public Rop assertNotNull(String key) {
-        String actualValue = findValueAsString(key);
-        testConfiguration.notNullConsumer().accept(actualValue);
+        try {
+            String actualValue = findValueAsString(key);
+            testConfiguration.notNullConsumer().accept(actualValue);
+        } catch (Throwable t) {
+            if (assertAll) {
+                failedAssertions.add(t);
+            } else {
+                throw t;
+            }
+        }
         return this;
     }
 
