@@ -1,0 +1,100 @@
+#.assertEquals("name", "Alexander")
+!.assertEquals("kidCount", "575")
+".assertEquals("married", "false")
+.assertNull("born")
+.assertNull("died")
+
+.assertNull("name")
+.assertNull("kidCount")
+.assertNull("married")
+.assertNull("born")
+.assertNull("died")
+
+.assertNull("firstName")
+.assertNull("lastName")
+.assertNull("license")
+.assertNull("cars.[0].make")
+.assertNull("cars.[0].model")
+.assertArraySize("cars", "1")
+
+.assertEquals("name", "Thor")
+.assertEquals("kidCount", "2")
+".assertEquals("married", "false")
+2.assertEquals("born", "2017-12-15T15:09:15.278Z")
+2.assertEquals("died", "2017-12-15T15:09:15.278Z")
+
+.assertEmpty("name")
+.assertNull("kidCount")
+.assertNull("married")
+.assertNull("born")
+.assertNull("died")
+
++.assertEquals("[0].firstName", "Johannes")
+).assertEquals("[0].lastName", "Strauss")
++.assertEquals("[0].license.category", "B")
+A.assertEquals("[0].license.expires", "2017-12-15T15:09:15.284Z")
+-.assertEquals("[0].cars.[0].make", "TOYOTA")
+-.assertEquals("[0].cars.[0].model", "PRIUS")
+-.assertEquals("[0].cars.[1].make", "SUBARU")
++.assertEquals("[0].cars.[1].model", "BRZ")
+".assertArraySize("[0].cars", "2")
+(.assertEquals("[1].firstName", "Young")
+%.assertEquals("[1].lastName", "Boi")
++.assertEquals("[1].license.category", "C")
+A.assertEquals("[1].license.expires", "2017-12-15T15:09:15.284Z")
+1.assertEquals("[1].cars.[0].make", "MITSUBISHI")
+..assertEquals("[1].cars.[0].model", "LANCER")
+".assertArraySize("[1].cars", "1")
+
+$.assertEquals("firstName", "Johan")
+".assertEquals("lastName", "Blem")
+'.assertEquals("license.category", "A")
+=.assertEquals("license.expires", "2017-12-15T15:09:15.289Z")
+'.assertEquals("cars.[0].make", "AUDI")
+&.assertEquals("cars.[0].model", "A6")
+&.assertEquals("cars.[1].make", "BMW")
+(.assertEquals("cars.[1].model", "535i")
+.assertArraySize("cars", "2")
+
+(.assertEquals("[0].name", "sven_array")
+$.assertEquals("[0].kidCount", "14")
+%.assertEquals("[0].married", "true")
+6.assertEquals("[0].born", "2017-12-15T15:09:15.290Z")
+6.assertEquals("[0].died", "2017-12-15T15:09:15.290Z")
+).assertEquals("[1].name", "frodo_array")
+#.assertEquals("[1].kidCount", "2")
+&.assertEquals("[1].married", "false")
+6.assertEquals("[1].born", "2017-12-15T15:09:15.290Z")
+6.assertEquals("[1].died", "2017-12-15T15:09:15.290Z")
+*.assertEquals("[2].name", "jansen_array")
+#.assertEquals("[2].kidCount", "8")
+&.assertEquals("[2].married", "false")
+6.assertEquals("[2].born", "2017-12-15T15:09:15.290Z")
+6.assertEquals("[2].died", "2017-12-15T15:09:15.290Z")
+
+	.assertEquals("name", "sven")
+	.assertEquals("kidCount", "7")
+	!.assertEquals("married", "true")
+	2.assertEquals("born", "2017-12-15T15:09:15.293Z")
+	2.assertEquals("died", "2017-12-15T15:09:15.293Z")
+	
+
+.assertEquals("name", "Jim")
+
+ .assertEquals("kidCount", "17")
+
+!.assertEquals("married", "true")
+
+.assertNull("born")
+
+.assertNull("died")
+
+
+
+%.assertEquals("[0][0].key", "Value")
+!.assertEquals("[0][1].hey", "1")
+'.assertEquals("[0][2].tramp", "false")
+#.assertEquals("[1][0].top", "Kek")
+%.assertEquals("[1][1].yolo", "true")
+).assertEquals("[2][0].something", "Bad")
+
