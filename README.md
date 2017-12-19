@@ -53,9 +53,9 @@ Rop.of(elements)
     .assertEquals("[0]", "int")
     .assertEquals("[1]", "double")
     .assertEquals("[2]", "short")
-    .newLine()
+    .separator()
     .assertEquals("[3]", "String")
     .assertEquals("[4]", "Object")
-    .newLine()
+    .separator()
     .assertArraySize(5);
 ```

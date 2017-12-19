@@ -56,7 +56,7 @@ public final class Rop {
         }
     }
 
-    public Rop newLine() {
+    public Rop separator() {
         return this;
     }
 
