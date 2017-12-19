@@ -19,6 +19,7 @@ public final class Rop {
     private static final DateFormat DF = initDateFormat();
     private static final ObjectMapper OM = initObjectMapper();
     private static final Pattern ARRAY_ELEMENT_PATTERN = Pattern.compile("\\[\\d+\\]");
+    private static final String EMPTY_JSON = "{}";
 
     private static TestConfiguration testConfiguration;
     private static Consumer<String> assertionPrinter;
@@ -28,16 +29,13 @@ public final class Rop {
     private List<Throwable> failedAssertions = new LinkedList<>();
 
     private Rop(Object object) throws IOException {
-        if (testConfiguration == null) {
-            throw new IllegalStateException("Test configuration is not set!");
-        }
-        if (assertionPrinter == null) {
-            throw new IllegalStateException("Assertion printer is not set!");
-        }
+        Objects.requireNonNull(object, "Can't form Rop from null element!");
+        Objects.requireNonNull(testConfiguration, "Rop test configuration is not set!");
+        Objects.requireNonNull(assertionPrinter, "Rop assertion printer is not set!");
+
         final String json;
-        final String objectString = object.toString();
-        if (object instanceof String && objectString != null && objectString.length() > 0) {
-            json = objectString;
+        if (object instanceof String && ((String) object).trim().length() > 0) {
+            json = object.toString();
         } else {
             json = OM.writeValueAsString(object);
         }
@@ -63,8 +61,14 @@ public final class Rop {
     }
 
     public Rop printAssertions() {
-        StringBuilder sb = buildAssertions(new StringBuilder(), new StringBuilder(), values);
-        assertionPrinter.accept(sb.toString());
+        if (values instanceof String && ((String) values).trim().length() == 0) {
+            assertionPrinter.accept(".assertEmpty()");
+        } else if (EMPTY_JSON.equals(values.toString())) {
+            assertionPrinter.accept(".assertEmptyJson()");
+        } else {
+            StringBuilder sb = buildAssertions(new StringBuilder(), new StringBuilder(), values);
+            assertionPrinter.accept(sb.toString());
+        }
         return this;
     }
 
@@ -186,6 +190,33 @@ public final class Rop {
             String actualValue = findValueAsString(key);
             ResultComparison resultComparison = new ResultComparison(actualValue, content);
             testConfiguration.containsConsumer().accept(resultComparison);
+        } catch (Throwable t) {
+            if (assertAll) {
+                failedAssertions.add(t);
+            } else {
+                throw t;
+            }
+        }
+        return this;
+    }
+
+    public Rop assertEmptyJson() {
+        try {
+            ResultComparison resultComparison = new ResultComparison(values.toString(), EMPTY_JSON);
+            testConfiguration.equalsConsumer().accept(resultComparison);
+        } catch (Throwable t) {
+            if (assertAll) {
+                failedAssertions.add(t);
+            } else {
+                throw t;
+            }
+        }
+        return this;
+    }
+
+    public Rop assertEmpty() {
+        try {
+            testConfiguration.emptyConsumer().accept(values.toString());
         } catch (Throwable t) {
             if (assertAll) {
                 failedAssertions.add(t);

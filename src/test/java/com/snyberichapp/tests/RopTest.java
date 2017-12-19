@@ -33,14 +33,18 @@ public abstract class RopTest {
 
     public void emptyJsonStringObjectTest() throws Exception {
         String emptyJson = "{}";
-        Rop.of(emptyJson)
-                .printAssertions();
+        Rop.of(emptyJson).printAssertions()
+                .assertEmptyJson();
     }
 
     public void stringEmptyObjectTest() throws Exception {
         String emptyString = "";
-        Rop.of(emptyString)
-                .printAssertions();
+        Rop.of(emptyString).printAssertions()
+                .assertEmpty();
+    }
+
+    public void nullObjectTest() throws Exception {
+        Rop.of(null).printAssertions();
     }
 
     public void arrayObjectTest() throws Exception {

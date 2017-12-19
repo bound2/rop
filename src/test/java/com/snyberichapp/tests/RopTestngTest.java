@@ -36,6 +36,12 @@ public class RopTestngTest extends RopTest {
         super.stringEmptyObjectTest();
     }
 
+    @Test(expectedExceptions = NullPointerException.class)
+    @Override
+    public void nullObjectTest() throws Exception {
+        super.nullObjectTest();
+    }
+
     @Test
     @Override
     public void arrayObjectTest() throws Exception {
