@@ -9,12 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,7 +34,13 @@ public final class Rop {
         if (assertionPrinter == null) {
             throw new IllegalStateException("Assertion printer is not set!");
         }
-        String json = object instanceof String ? object.toString() : OM.writeValueAsString(object);
+        final String json;
+        final String objectString = object.toString();
+        if (object instanceof String && objectString != null && objectString.length() > 0) {
+            json = objectString;
+        } else {
+            json = OM.writeValueAsString(object);
+        }
         this.values = OM.readValue(json, Object.class);
     }
 

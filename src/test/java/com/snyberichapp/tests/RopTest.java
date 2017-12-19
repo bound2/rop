@@ -31,6 +31,18 @@ public abstract class RopTest {
                 .assertEquals("accessToken", "80a2e810-3349-4731-b78b-28eb0d40fc2f");
     }
 
+    public void emptyJsonStringObjectTest() throws Exception {
+        String emptyJson = "{}";
+        Rop.of(emptyJson)
+                .printAssertions();
+    }
+
+    public void stringEmptyObjectTest() throws Exception {
+        String emptyString = "";
+        Rop.of(emptyString)
+                .printAssertions();
+    }
+
     public void arrayObjectTest() throws Exception {
         Calendar calendar = Calendar.getInstance();
         Instant instant = Instant.now();
