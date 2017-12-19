@@ -9,12 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,6 +19,7 @@ public final class Rop {
     private static final DateFormat DF = initDateFormat();
     private static final ObjectMapper OM = initObjectMapper();
     private static final Pattern ARRAY_ELEMENT_PATTERN = Pattern.compile("\\[\\d+\\]");
+    private static final String EMPTY_JSON = "{}";
 
     private static TestConfiguration testConfiguration;
     private static Consumer<String> assertionPrinter;
@@ -33,13 +29,16 @@ public final class Rop {
     private List<Throwable> failedAssertions = new LinkedList<>();
 
     private Rop(Object object) throws IOException {
-        if (testConfiguration == null) {
-            throw new IllegalStateException("Test configuration is not set!");
+        Objects.requireNonNull(object, "Can't form Rop from null element!");
+        Objects.requireNonNull(testConfiguration, "Rop test configuration is not set!");
+        Objects.requireNonNull(assertionPrinter, "Rop assertion printer is not set!");
+
+        final String json;
+        if (object instanceof String && ((String) object).trim().length() > 0) {
+            json = object.toString();
+        } else {
+            json = OM.writeValueAsString(object);
         }
-        if (assertionPrinter == null) {
-            throw new IllegalStateException("Assertion printer is not set!");
-        }
-        String json = OM.writeValueAsString(object);
         this.values = OM.readValue(json, Object.class);
     }
 
@@ -62,8 +61,14 @@ public final class Rop {
     }
 
     public Rop printAssertions() {
-        StringBuilder sb = buildAssertions(new StringBuilder(), new StringBuilder(), values);
-        assertionPrinter.accept(sb.toString());
+        if (values instanceof String && ((String) values).trim().length() == 0) {
+            assertionPrinter.accept(".assertEmpty()");
+        } else if (EMPTY_JSON.equals(values.toString())) {
+            assertionPrinter.accept(".assertEmptyJson()");
+        } else {
+            StringBuilder sb = buildAssertions(new StringBuilder(), new StringBuilder(), values);
+            assertionPrinter.accept(sb.toString());
+        }
         return this;
     }
 
@@ -195,6 +200,33 @@ public final class Rop {
         return this;
     }
 
+    public Rop assertEmptyJson() {
+        try {
+            ResultComparison resultComparison = new ResultComparison(values.toString(), EMPTY_JSON);
+            testConfiguration.equalsConsumer().accept(resultComparison);
+        } catch (Throwable t) {
+            if (assertAll) {
+                failedAssertions.add(t);
+            } else {
+                throw t;
+            }
+        }
+        return this;
+    }
+
+    public Rop assertEmpty() {
+        try {
+            testConfiguration.emptyConsumer().accept(values.toString());
+        } catch (Throwable t) {
+            if (assertAll) {
+                failedAssertions.add(t);
+            } else {
+                throw t;
+            }
+        }
+        return this;
+    }
+
     public Rop assertEmpty(String key) {
         try {
             String actualValue = findValueAsString(key);
@@ -237,8 +269,8 @@ public final class Rop {
         return this;
     }
 
-    @SuppressWarnings("unchecked")
-    private Object findValue(String key) {
+    @SuppressWarnings({"unchecked", "WeakerAccess"})
+    public Object findValue(String key) {
         LinkedList<String> tokens = new LinkedList<>(Arrays.asList(key.split("\\.")));
 
         String firstToken = tokens.removeFirst();
@@ -251,7 +283,8 @@ public final class Rop {
         return element;
     }
 
-    private String findValueAsString(String key) {
+    @SuppressWarnings("WeakerAccess")
+    public String findValueAsString(String key) {
         Object element = findValue(key);
         return element != null ? element.toString() : null;
     }

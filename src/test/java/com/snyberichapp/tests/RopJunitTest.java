@@ -20,6 +20,30 @@ public class RopJunitTest extends RopTest {
 
     @Test
     @Override
+    public void jsonStringObjectTest() throws Exception {
+        super.jsonStringObjectTest();
+    }
+
+    @Test
+    @Override
+    public void emptyJsonStringObjectTest() throws Exception {
+        super.emptyJsonStringObjectTest();
+    }
+
+    @Test
+    @Override
+    public void stringEmptyObjectTest() throws Exception {
+        super.stringEmptyObjectTest();
+    }
+
+    @Test(expected = NullPointerException.class)
+    @Override
+    public void nullObjectTest() throws Exception {
+        super.nullObjectTest();
+    }
+
+    @Test
+    @Override
     public void arrayObjectTest() throws Exception {
         super.arrayObjectTest();
     }

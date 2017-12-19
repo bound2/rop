@@ -24,6 +24,29 @@ public abstract class RopTest {
                 .assertEquals("died", DateTimeFormatter.ISO_INSTANT.format(instant));
     }
 
+    public void jsonStringObjectTest() throws Exception {
+        String json = "{\"id\":\"5a3867bd2b13db0c30cada5a\",\"accessToken\":\"80a2e810-3349-4731-b78b-28eb0d40fc2f\"}";
+        Rop.of(json).printAssertions()
+                .assertEquals("id", "5a3867bd2b13db0c30cada5a")
+                .assertEquals("accessToken", "80a2e810-3349-4731-b78b-28eb0d40fc2f");
+    }
+
+    public void emptyJsonStringObjectTest() throws Exception {
+        String emptyJson = "{}";
+        Rop.of(emptyJson).printAssertions()
+                .assertEmptyJson();
+    }
+
+    public void stringEmptyObjectTest() throws Exception {
+        String emptyString = "";
+        Rop.of(emptyString).printAssertions()
+                .assertEmpty();
+    }
+
+    public void nullObjectTest() throws Exception {
+        Rop.of(null).printAssertions();
+    }
+
     public void arrayObjectTest() throws Exception {
         Calendar calendar = Calendar.getInstance();
         Instant instant = Instant.now();
