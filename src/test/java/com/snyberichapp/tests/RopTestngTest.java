@@ -20,6 +20,12 @@ public class RopTestngTest extends RopTest {
 
     @Test
     @Override
+    public void jsonStringObjectTest() throws Exception {
+        super.jsonStringObjectTest();
+    }
+
+    @Test
+    @Override
     public void arrayObjectTest() throws Exception {
         super.arrayObjectTest();
     }

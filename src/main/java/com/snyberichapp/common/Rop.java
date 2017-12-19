@@ -39,7 +39,7 @@ public final class Rop {
         if (assertionPrinter == null) {
             throw new IllegalStateException("Assertion printer is not set!");
         }
-        String json = OM.writeValueAsString(object);
+        String json = object instanceof String ? object.toString() : OM.writeValueAsString(object);
         this.values = OM.readValue(json, Object.class);
     }
 
@@ -237,8 +237,8 @@ public final class Rop {
         return this;
     }
 
-    @SuppressWarnings("unchecked")
-    private Object findValue(String key) {
+    @SuppressWarnings({"unchecked", "WeakerAccess"})
+    public Object findValue(String key) {
         LinkedList<String> tokens = new LinkedList<>(Arrays.asList(key.split("\\.")));
 
         String firstToken = tokens.removeFirst();
@@ -251,7 +251,8 @@ public final class Rop {
         return element;
     }
 
-    private String findValueAsString(String key) {
+    @SuppressWarnings("WeakerAccess")
+    public String findValueAsString(String key) {
         Object element = findValue(key);
         return element != null ? element.toString() : null;
     }
