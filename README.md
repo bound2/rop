@@ -30,8 +30,8 @@ Rop.of(car)
     .assertEquals("make", "Audi")
     .assertEquals("model", "A7")
     .assertEquals("year", "2017")
-    .assertEquals("notes.[0]", "Good condition")
-    .assertEquals("notes.[1]", "Low mileage")
+    .assertEquals("notes[0]", "Good condition")
+    .assertEquals("notes[1]", "Low mileage")
     .assertArraySize("notes", 2);
 ```
 
