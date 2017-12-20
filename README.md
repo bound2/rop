@@ -1,9 +1,8 @@
 # rop - response object proxy
 
-Have you ever had a problem where you refactor java objects and
-accidentally end up breaking your API as it refactored all the tests?
-Rop will eliminate this possibility by wrapping testable objects 
-and forcing the developer to use object field comparison with String literal.
+Have you ever had a problem, where you refactor java objects, and
+accidentally end up breaking your API because it refactored all the tests?
+Rop will eliminate this possibility by wrapping testable objects. Forcing the developer to use object field comparison with String literal.
 
 ## Usage
 
