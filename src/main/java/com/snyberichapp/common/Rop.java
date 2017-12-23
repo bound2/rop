@@ -52,7 +52,7 @@ public final class Rop {
             t.printStackTrace();
         }
         if (failedAssertions.size() > 0) {
-            throw new RuntimeException("Assert all failed!");
+            throw new AssertAllException();
         }
     }
 

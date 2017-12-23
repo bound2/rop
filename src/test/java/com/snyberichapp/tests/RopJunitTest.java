@@ -1,5 +1,6 @@
 package com.snyberichapp.tests;
 
+import com.snyberichapp.common.AssertAllException;
 import com.snyberichapp.common.JunitConfiguration;
 import com.snyberichapp.common.Rop;
 import org.junit.BeforeClass;
@@ -100,5 +101,11 @@ public class RopJunitTest extends RopTest {
     @Override
     public void printAssertionsTest() throws Exception {
         super.printAssertionsTest();
+    }
+
+    @Test(expected = AssertAllException.class)
+    @Override
+    public void assertAllTest() throws Exception {
+        super.assertAllTest();
     }
 }

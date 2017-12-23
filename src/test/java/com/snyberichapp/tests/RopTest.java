@@ -325,4 +325,17 @@ public abstract class RopTest {
                 .assertArraySize("cars[0].notes", 3)
                 .assertArraySize("cars", 1);
     }
+
+    public void assertAllTest() throws Exception {
+
+        RegularTestObject testObject = new RegularTestObject("Thor", 2, Boolean.FALSE, Calendar.getInstance(), Instant.now());
+
+        Rop.of(testObject).enableAssertAll()
+                .assertNull("name")
+                .assertNull("kidCount")
+                .assertNull("married")
+                .assertNull("born")
+                .assertNull("died")
+                .assertAll();
+    }
 }

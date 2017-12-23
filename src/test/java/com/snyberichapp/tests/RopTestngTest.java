@@ -1,5 +1,6 @@
 package com.snyberichapp.tests;
 
+import com.snyberichapp.common.AssertAllException;
 import com.snyberichapp.common.Rop;
 import com.snyberichapp.common.TestngConfiguration;
 import org.testng.annotations.BeforeClass;
@@ -100,5 +101,11 @@ public class RopTestngTest extends RopTest {
     @Override
     public void printAssertionsTest() throws Exception {
         super.printAssertionsTest();
+    }
+
+    @Test(expectedExceptions = AssertAllException.class, expectedExceptionsMessageRegExp = "Assert all failed!")
+    @Override
+    public void assertAllTest() throws Exception {
+        super.assertAllTest();
     }
 }
