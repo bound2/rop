@@ -317,12 +317,12 @@ public abstract class RopTest {
                 .assertEquals("firstName", "Haram")
                 .assertEquals("lastName", "Boi")
                 .assertNull("license")
-                .assertEquals("cars.[0].make", "Audi")
-                .assertEquals("cars.[0].model", "A7")
-                .assertEquals("cars.[0].notes.[0]", "Very new")
-                .assertEquals("cars.[0].notes.[1]", "Good condition")
-                .assertEquals("cars.[0].notes.[2]", "Low mileage")
-                .assertArraySize("cars.[0].notes", 3)
+                .assertEquals("cars[0].make", "Audi")
+                .assertEquals("cars[0].model", "A7")
+                .assertEquals("cars[0].notes[0]", "Very new")
+                .assertEquals("cars[0].notes[1]", "Good condition")
+                .assertEquals("cars[0].notes[2]", "Low mileage")
+                .assertArraySize("cars[0].notes", 3)
                 .assertArraySize("cars", 1);
     }
 }

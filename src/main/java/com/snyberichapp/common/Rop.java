@@ -81,7 +81,7 @@ public final class Rop {
                     if (keyBuilderCopy.length() > 0) {
                         keyBuilderCopy.append(".");
                     }
-                    keyBuilderCopy.append(k).append(".");
+                    keyBuilderCopy.append(k);
                     assertionBuilder.append(buildAssertions(new StringBuilder(), keyBuilderCopy, v));
                 }
                 if (v instanceof Map) {
