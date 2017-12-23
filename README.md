@@ -34,11 +34,6 @@ Rop.of(car)
     .assertArraySize("notes", 2);
 ```
 
-### Print all data
-```
-Rop.of(car).printAssertions();
-```
-
 ### Separate elements logically
 ```
 List<String> elements = Arrays.asList(
@@ -57,4 +52,19 @@ Rop.of(elements)
     .assertEquals("[4]", "Object")
     .separator()
     .assertArraySize(5);
+```
+
+### Assert the whole object
+Make sure to call assertAll() in the end, otherwise it won't fail for invalid assertions.
+```
+Rop.of(car).enableAssertAll()
+    .assertNotNull("make")
+    .assertStartsWith("model", "Volks")
+    .assertContains("year", "1783")
+    .assertAll();
+```
+
+### Print all object data
+```
+Rop.of(car).printAssertions();
 ```
