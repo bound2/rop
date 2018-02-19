@@ -3,6 +3,7 @@ version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
 apply plugin: 'maven-publish'
+apply plugin: 'jacoco'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 
@@ -22,6 +23,14 @@ dependencies {
 task sourceJar(type: Jar) {
     from sourceSets.main.allJava
     classifier "sources"
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination file("${buildDir}/jacocoHtml")
+    }
 }
 
 publishing {

@@ -12,6 +12,14 @@ import static java.util.Collections.singletonMap;
 
 public abstract class RopTest {
 
+    private static final RegularTestObject ERROR_CASE_TEST_OBJECT = new RegularTestObject(
+            "Aloha",
+            0,
+            null,
+            null,
+            null
+    );
+
     public void regularObjectTest() throws Exception {
         Calendar calendar = Calendar.getInstance();
         Instant instant = Instant.now();
@@ -328,14 +336,52 @@ public abstract class RopTest {
 
     public void assertAllTest() throws Exception {
 
-        RegularTestObject testObject = new RegularTestObject("Thor", 2, Boolean.FALSE, Calendar.getInstance(), Instant.now());
+        RegularTestObject testObject = new RegularTestObject("Thor", 2, Boolean.FALSE, null, Instant.now());
 
         Rop.of(testObject).enableAssertAll()
-                .assertNull("name")
+                .assertArraySize(0)
+                .assertStartsWith("name", "Bandu")
+                .assertContains("name", "Mahtra")
+                .assertEmptyJson()
+                .assertEmpty()
+                .assertEquals("kidCount", "3")
+                .assertEmpty("name")
                 .assertNull("kidCount")
-                .assertNull("married")
-                .assertNull("born")
-                .assertNull("died")
+                .assertNotNull("born")
                 .assertAll();
     }
+
+    // ================================== ERROR CASES ================================== //
+    public void arraySizeErrorTest() throws Exception {
+        Rop.of(ERROR_CASE_TEST_OBJECT).assertArraySize(0);
+    }
+
+    public void startsWithErrorTest() throws Exception {
+        Rop.of(ERROR_CASE_TEST_OBJECT).assertStartsWith("name", "Bandu");
+    }
+
+    public void containsErrorTest() throws Exception {
+        Rop.of(ERROR_CASE_TEST_OBJECT).assertContains("name", "binge");
+    }
+
+    public void emptyJsonErrorTest() throws Exception {
+        Rop.of(ERROR_CASE_TEST_OBJECT).assertEmptyJson();
+    }
+
+    public void emptyErrorTest() throws Exception {
+        Rop.of(ERROR_CASE_TEST_OBJECT).assertEmpty();
+    }
+
+    public void emptyWithKeyErrorTest() throws Exception {
+        Rop.of(ERROR_CASE_TEST_OBJECT).assertEmpty("name");
+    }
+
+    public void nullErrorTest() throws Exception {
+        Rop.of(ERROR_CASE_TEST_OBJECT).assertNull("name");
+    }
+
+    public void notNullErrorTest() throws Exception {
+        Rop.of(ERROR_CASE_TEST_OBJECT).assertNotNull("born");
+    }
+
 }

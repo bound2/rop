@@ -108,4 +108,52 @@ public class RopJunitTest extends RopTest {
     public void assertAllTest() throws Exception {
         super.assertAllTest();
     }
+
+    @Test(expected = IllegalStateException.class)
+    @Override
+    public void arraySizeErrorTest() throws Exception {
+        super.arraySizeErrorTest();
+    }
+
+    @Test(expected = AssertionError.class)
+    @Override
+    public void startsWithErrorTest() throws Exception {
+        super.startsWithErrorTest();
+    }
+
+    @Test(expected = AssertionError.class)
+    @Override
+    public void containsErrorTest() throws Exception {
+        super.containsErrorTest();
+    }
+
+    @Test(expected = AssertionError.class)
+    @Override
+    public void emptyJsonErrorTest() throws Exception {
+        super.emptyJsonErrorTest();
+    }
+
+    @Test(expected = AssertionError.class)
+    @Override
+    public void emptyErrorTest() throws Exception {
+        super.emptyErrorTest();
+    }
+
+    @Test(expected = AssertionError.class)
+    @Override
+    public void emptyWithKeyErrorTest() throws Exception {
+        super.emptyWithKeyErrorTest();
+    }
+
+    @Test(expected = AssertionError.class)
+    @Override
+    public void nullErrorTest() throws Exception {
+        super.nullErrorTest();
+    }
+
+    @Test(expected = AssertionError.class)
+    @Override
+    public void notNullErrorTest() throws Exception {
+        super.notNullErrorTest();
+    }
 }
