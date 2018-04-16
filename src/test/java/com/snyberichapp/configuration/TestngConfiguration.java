@@ -1,5 +1,7 @@
-package com.snyberichapp.common;
+package com.snyberichapp.configuration;
 
+import com.snyberichapp.common.ResultComparison;
+import com.snyberichapp.common.TestConfiguration;
 import org.testng.Assert;
 
 import java.util.function.Consumer;
