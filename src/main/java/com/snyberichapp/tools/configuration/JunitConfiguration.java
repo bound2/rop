@@ -1,7 +1,6 @@
-package com.snyberichapp.configuration;
+package com.snyberichapp.tools.configuration;
 
-import com.snyberichapp.common.ResultComparison;
-import com.snyberichapp.common.TestConfiguration;
+import com.snyberichapp.tools.ResultComparison;
 import org.junit.Assert;
 
 import java.util.function.Consumer;

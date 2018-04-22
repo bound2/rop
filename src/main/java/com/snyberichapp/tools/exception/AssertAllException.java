@@ -1,4 +1,4 @@
-package com.snyberichapp.common;
+package com.snyberichapp.tools.exception;
 
 public class AssertAllException extends RuntimeException {
 

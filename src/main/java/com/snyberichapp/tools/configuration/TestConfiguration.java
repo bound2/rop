@@ -1,4 +1,6 @@
-package com.snyberichapp.common;
+package com.snyberichapp.tools.configuration;
+
+import com.snyberichapp.tools.ResultComparison;
 
 import java.util.function.Consumer;
 

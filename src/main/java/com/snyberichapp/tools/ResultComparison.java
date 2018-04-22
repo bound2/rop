@@ -1,4 +1,4 @@
-package com.snyberichapp.common;
+package com.snyberichapp.tools;
 
 public class ResultComparison {
 

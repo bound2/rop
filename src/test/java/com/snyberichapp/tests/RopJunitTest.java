@@ -1,8 +1,8 @@
 package com.snyberichapp.tests;
 
-import com.snyberichapp.common.AssertAllException;
-import com.snyberichapp.configuration.JunitConfiguration;
-import com.snyberichapp.common.Rop;
+import com.snyberichapp.tools.exception.AssertAllException;
+import com.snyberichapp.tools.configuration.JunitConfiguration;
+import com.snyberichapp.tools.Rop;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

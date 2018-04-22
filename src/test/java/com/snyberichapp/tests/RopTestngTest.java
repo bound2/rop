@@ -1,8 +1,8 @@
 package com.snyberichapp.tests;
 
-import com.snyberichapp.common.AssertAllException;
-import com.snyberichapp.common.Rop;
-import com.snyberichapp.configuration.TestngConfiguration;
+import com.snyberichapp.tools.exception.AssertAllException;
+import com.snyberichapp.tools.Rop;
+import com.snyberichapp.tools.configuration.TestngConfiguration;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 

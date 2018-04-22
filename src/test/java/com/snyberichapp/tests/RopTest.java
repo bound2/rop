@@ -1,6 +1,6 @@
 package com.snyberichapp.tests;
 
-import com.snyberichapp.common.Rop;
+import com.snyberichapp.tools.Rop;
 import com.snyberichapp.tests.pojo.NestedTestObject;
 import com.snyberichapp.tests.pojo.RegularTestObject;
 
