@@ -2,16 +2,32 @@
 
 Have you ever had a problem, where you refactor java objects, and
 accidentally end up breaking your API because it refactored all the tests?
-Rop will eliminate this possibility by wrapping testable objects. Forcing the developer to use object field comparison with String literal.
+Rop will eliminate this possibility by wrapping testable objects. 
+Forcing the developer to use object field comparison with String literal.
 
 ## Usage
+
+### Setup gradle
+Do note that both TestNG and Junit are included by default. 
+Make sure to exclude them if you already have the dependencies.
+```
+repositories {
+    jcenter()
+}
+dependencies {
+    testCompile('com.snyberichapp.tools:response-object-proxy:1.0.1') {
+        exclude module: 'junit'  // exclude if needed
+        exclude module: 'testng' // exclude if needed
+    }
+}
+```
 
 ### Setup TestNg
 ```
 // Second parameter defines consumer for printAssertions
 Rop.setConfiguration(new TestngConfiguration(), System.out::println);
 ```
-### Setup junit
+### Setup Junit
 ```
 // Second parameter defines consumer for printAssertions
 Rop.setConfiguration(new JunitConfiguration(), System.out::println);
