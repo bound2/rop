@@ -46,7 +46,7 @@ jacocoTestReport {
 def pomConfig = {
     licenses {
         license {
-            name 'MIT License'
+            name 'MIT'
             url 'https://raw.githubusercontent.com/bound2/rop/master/LICENSE'
             distribution 'repo'
         }
@@ -89,7 +89,7 @@ bintray {
         repo = 'tools'
         name = 'response-object-proxy'
         userOrg = 'snyberichapp'
-        licenses = ['MIT License']
+        licenses = ['MIT']
         vcsUrl = 'https://github.com/bound2/rop.git'
         websiteUrl = 'http://snyberichapp.com'
         version {
