@@ -1,5 +1,5 @@
 group 'com.snyberichapp'
-version '1.0'
+version project.property('projectVersion')
 
 buildscript {
     repositories {
@@ -46,15 +46,15 @@ jacocoTestReport {
 def pomConfig = {
     licenses {
         license {
-            name "MIT License"
-            url "https://raw.githubusercontent.com/bound2/rop/master/LICENSE"
-            distribution "repo"
+            name 'MIT License'
+            url 'https://raw.githubusercontent.com/bound2/rop/master/LICENSE'
+            distribution 'repo'
         }
     }
     developers {
         developer {
-            name "bound2"
-            email "snyberichapp@gmail.com"
+            name 'bound2'
+            email 'snyberichapp@gmail.com'
         }
     }
 }
@@ -65,7 +65,7 @@ publishing {
             artifact jar
             groupId 'com.snyberichapp.tools'
             artifactId 'response-object-proxy'
-            version '1.0'
+            version project.property('projectVersion')
             pom.withXml {
                 def root = asNode()
                 def dependenciesNode = root.appendNode('dependencies')
@@ -93,7 +93,7 @@ bintray {
         vcsUrl = 'https://github.com/bound2/rop.git'
         websiteUrl = 'http://snyberichapp.com'
         version {
-            name = '1.0'
+            name = project.property('projectVersion')
             desc = 'Response object proxy - testing library'
             released = new Date()
         }
