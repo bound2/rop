@@ -1,22 +1,22 @@
-package com.snyberichapp.tools.configuration;
+package com.snyberichapp.tools.rop.configuration;
 
-import com.snyberichapp.tools.ResultComparison;
-import org.junit.Assert;
+import com.snyberichapp.tools.rop.ResultComparison;
+import org.testng.Assert;
 
 import java.util.function.Consumer;
 
-public class JunitConfiguration implements TestConfiguration {
+public class TestngConfiguration implements TestConfiguration {
 
     @Override
     public Consumer<ResultComparison> equalsConsumer() {
-        return result -> Assert.assertEquals(result.getExpected(), result.getActual());
+        return result -> Assert.assertEquals(result.getActual(), result.getExpected());
     }
 
     @Override
     public Consumer<ResultComparison> startsWithConsumer() {
         return result -> {
             String errorMessage = String.format("Expected %s to start with %s", result.getExpected(), result.getActual());
-            Assert.assertTrue(errorMessage, result.getActual().startsWith(result.getExpected()));
+            Assert.assertTrue(result.getActual().startsWith(result.getExpected()), errorMessage);
         };
     }
 
@@ -24,7 +24,7 @@ public class JunitConfiguration implements TestConfiguration {
     public Consumer<ResultComparison> containsConsumer() {
         return result -> {
             String errorMessage = String.format("%s didn't contain %s", result.getActual(), result.getExpected());
-            Assert.assertTrue(errorMessage, result.getActual().contains(result.getExpected()));
+            Assert.assertTrue(result.getActual().contains(result.getExpected()), errorMessage);
         };
     }
 
@@ -40,7 +40,7 @@ public class JunitConfiguration implements TestConfiguration {
 
     @Override
     public Consumer<String> emptyConsumer() {
-        return item -> Assert.assertEquals("Expected element to be empty, but was: " + item, "", item);
+        return item -> Assert.assertEquals(item, "", "Expected element to be empty, but was: " + item);
     }
 
 }

@@ -1,6 +1,6 @@
-package com.snyberichapp.tools.configuration;
+package com.snyberichapp.tools.rop.configuration;
 
-import com.snyberichapp.tools.ResultComparison;
+import com.snyberichapp.tools.rop.ResultComparison;
 
 import java.util.function.Consumer;
 

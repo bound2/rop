@@ -1,12 +1,12 @@
-package com.snyberichapp.tools;
+package com.snyberichapp.tools.rop;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.snyberichapp.tools.configuration.TestConfiguration;
-import com.snyberichapp.tools.exception.AssertAllException;
+import com.snyberichapp.tools.rop.configuration.TestConfiguration;
+import com.snyberichapp.tools.rop.exception.AssertAllException;
 
 import java.io.IOException;
 import java.text.DateFormat;

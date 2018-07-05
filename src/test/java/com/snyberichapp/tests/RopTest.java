@@ -2,7 +2,7 @@ package com.snyberichapp.tests;
 
 import com.snyberichapp.tests.pojo.NestedTestObject;
 import com.snyberichapp.tests.pojo.RegularTestObject;
-import com.snyberichapp.tools.Rop;
+import com.snyberichapp.tools.rop.Rop;
 
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
