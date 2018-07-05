@@ -103,6 +103,12 @@ public class RopTestngTest extends RopTest {
         super.printAssertionsTest();
     }
 
+    @Test(expectedExceptions = RuntimeException.class, expectedExceptionsMessageRegExp = "Found pending assertions!")
+    @Override
+    public void consistencyTest() throws Exception {
+        super.consistencyTest();
+    }
+
     @Test(expectedExceptions = AssertAllException.class, expectedExceptionsMessageRegExp = "Assert all failed!")
     @Override
     public void assertAllTest() throws Exception {

@@ -18,17 +18,18 @@ import java.util.regex.Pattern;
 
 public final class Rop {
 
-    private static final DateFormat DF = initDateFormat();
     private static final ObjectMapper OM = initObjectMapper();
     private static final Pattern ARRAY_ELEMENT_PATTERN = Pattern.compile("\\[\\d+\\]");
     private static final String EMPTY_JSON = "{}";
+    private static final Set<Rop> PENDING_ASSERTIONS = Collections.synchronizedSet(new HashSet<>());
 
     private static TestConfiguration testConfiguration;
     private static Consumer<String> assertionPrinter;
 
+    private final String identifier;
     private Object values;
     private boolean assertAll;
-    private List<Throwable> failedAssertions = new LinkedList<>();
+    private List<Throwable> failedAssertions = Collections.synchronizedList(new LinkedList<>());
 
     private Rop(Object object) throws IOException {
         Objects.requireNonNull(object, "Can't form Rop from null element!");
@@ -42,19 +43,25 @@ public final class Rop {
             json = OM.writeValueAsString(object);
         }
         this.values = OM.readValue(json, Object.class);
+        this.identifier = UUID.randomUUID().toString();
     }
 
     public Rop enableAssertAll() {
         this.assertAll = true;
+        PENDING_ASSERTIONS.add(this);
         return this;
     }
 
     public void assertAll() {
-        for (Throwable t : failedAssertions) {
-            t.printStackTrace();
-        }
-        if (failedAssertions.size() > 0) {
-            throw new AssertAllException();
+        try {
+            for (Throwable t : failedAssertions) {
+                t.printStackTrace();
+            }
+            if (failedAssertions.size() > 0) {
+                throw new AssertAllException();
+            }
+        } finally {
+            PENDING_ASSERTIONS.remove(this);
         }
     }
 
@@ -322,6 +329,23 @@ public final class Rop {
                 .replace("]", ""));
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.identifier);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Rop that = (Rop) o;
+        return Objects.equals(this.identifier, that.identifier);
+    }
+
     // ========================= HELPER METHODS ========================= //
     public static Rop of(Object object) throws IOException {
         return new Rop(object);
@@ -332,17 +356,23 @@ public final class Rop {
         Rop.assertionPrinter = assertionPrinter;
     }
 
+    public static void validateConsistency() {
+        if (PENDING_ASSERTIONS.size() > 0) {
+            throw new RuntimeException("Found pending assertions!");
+        }
+    }
+
     private static ObjectMapper initObjectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setSerializationInclusion(JsonInclude.Include.ALWAYS);
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-        objectMapper.setDateFormat(DF);
+        objectMapper.setDateFormat(getUTCDateFormat());
         objectMapper.registerModule(new Jdk8Module());
         objectMapper.registerModule(new JavaTimeModule());
         return objectMapper;
     }
 
-    private static DateFormat initDateFormat() {
+    private static DateFormat getUTCDateFormat() {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
         df.setTimeZone(TimeZone.getTimeZone("UTC"));
         return df;

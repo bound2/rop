@@ -1,8 +1,8 @@
 package com.snyberichapp.tests;
 
-import com.snyberichapp.tools.Rop;
 import com.snyberichapp.tests.pojo.NestedTestObject;
 import com.snyberichapp.tests.pojo.RegularTestObject;
+import com.snyberichapp.tools.Rop;
 
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
@@ -227,16 +227,16 @@ public abstract class RopTest {
 
         {
             List<Map[]> items = new ArrayList<>();
-            items.add(new Map[] {
+            items.add(new Map[]{
                     singletonMap("key", "Value"),
                     singletonMap("hey", 1),
                     singletonMap("tramp", Boolean.FALSE)
             });
-            items.add(new Map[] {
+            items.add(new Map[]{
                     singletonMap("top", "Kek"),
                     singletonMap("yolo", Boolean.TRUE)
             });
-            items.add(new Map[] {
+            items.add(new Map[]{
                     singletonMap("something", "Bad")
             });
 
@@ -349,6 +349,16 @@ public abstract class RopTest {
                 .assertNull("kidCount")
                 .assertNotNull("born")
                 .assertAll();
+    }
+
+    public void consistencyTest() throws Exception {
+        RegularTestObject testObject = new RegularTestObject("Junit", 0, Boolean.FALSE, Calendar.getInstance(), Instant.now());
+        Rop.of(testObject).enableAssertAll()
+                .assertEquals("name", "Junit")
+                .assertEquals("kidCount", "0")
+                .assertEquals("married", "false");
+
+        Rop.validateConsistency();
     }
 
     // ================================== ERROR CASES ================================== //

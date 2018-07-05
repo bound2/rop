@@ -103,6 +103,12 @@ public class RopJunitTest extends RopTest {
         super.printAssertionsTest();
     }
 
+    @Test(expected = RuntimeException.class)
+    @Override
+    public void consistencyTest() throws Exception {
+        super.consistencyTest();
+    }
+
     @Test(expected = AssertAllException.class)
     @Override
     public void assertAllTest() throws Exception {
