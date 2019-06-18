@@ -15,7 +15,7 @@ repositories {
     jcenter()
 }
 dependencies {
-    testCompile('com.snyberichapp.tools:response-object-proxy:1.0.3') {
+    testCompile('com.snyberichapp.tools:response-object-proxy:1.0.2') {
         exclude module: 'junit'  // exclude if needed
         exclude module: 'testng' // exclude if needed
     }
